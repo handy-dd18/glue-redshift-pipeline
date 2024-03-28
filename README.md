@@ -20,7 +20,7 @@ Glue Jobでの取り込みのために事前にUTF-8への文字コード変換�
 ![](img/glue-redshift-pipeline.png)
 
 
-# 前提
+# 検証環境
 - 検証時の環境バージョンは以下です。
   - WSL バージョン: 2.1.5.0
   - カーネル バージョン: 5.15.146.1-2
@@ -28,6 +28,9 @@ Glue Jobでの取り込みのために事前にUTF-8への文字コード変換�
   - Docker version 24.0.6, build ed223bc
   - aws-vault 7.2.0-Homebrew
 
+# 前提条件
+1つのVPCと3AZ分のSubnetは事前に作成されているものとします。
+デプロイ環境になければ作成しておいてください。
 
 # 事前作業
 Terraformはバージョンが頻繁に更新されるので、tfenvで管理できるとはいえ、切り替え忘れによるデプロイ失敗が発生することがあります。<br>
@@ -97,7 +100,7 @@ Enter MFA code for arn:aws:iam::123456789123:mfa/xxxxxxxx: 111111　※MFA設定
 Starting subshell /bin/bash, use `exit` to exit the subshell
 ```
 
-エラーなく実行出来たら以下のコマンドを実行するとトークンの有効期限が表示されると思います。
+エラーなく実行出来たら以下のコマンドを実行し、トークンの有効期限を確認します。
 
 ```
 $ aws-vault list
@@ -108,14 +111,19 @@ default                  -                        -
 [プロファイル名]          [プロファイル名]         sts.GetSessionToken:58m49s
 ```
 
-後は以下のフォーマットで必要なコマンドを実行するだけです。<br>
-applyまで実行すれば自環境に構築されていると思います。
+本リポジトリのリソースは1つのVPCと3つのSubnetを利用するため、デプロイ先の環境のリソースIDに置き換えて以下を実行します。
 
 ```
 $ export vpc_id=vpc-xxxxxxxxxxxxxxxxx
 $ export subnet_private_1a_id=subnet-xxxxxxxxxxxxxxxxx
 $ export subnet_private_1c_id=subnet-xxxxxxxxxxxxxxxxx
 $ export subnet_private_1d_id=subnet-xxxxxxxxxxxxxxxxx
+```
+
+後は以下のコマンドを実行するだけです。<br>
+applyまで実行すればデプロイ先の環境に構築されていると思います。
+
+```
 $ docker compose run --rm terraform init
 $ docker compose run --rm terraform plan
 $ docker compose run --rm terraform apply
@@ -124,18 +132,18 @@ $ docker compose run --rm terraform apply -refresh-only
 ```
 
 ## デプロイ後確認
-正常にデプロイされたら、「raw-data-[accountid]」バケットの「from_samplesystem/sample_data/」パスにサンプルファイルがアップロードされます。
+正常にデプロイされたら、「raw-data-[accountid]」バケットの「from_samplesystem/sample_data/」プレフィックスにサンプルファイルがアップロードされます。
 
 ![](img/s3_file.png)
 
 アップロードイベントによってEventBridgeからSrepFunctionsが実行され、Glue Jobが実行されます。<br>
 Glue Jobは大体1分半ぐらいで終了します。<br>
-※もし実行されてなければ、S3上のファイルをダウンロードして、再アップロードしてください
+※もし実行されてなければ、上記のS3上のファイルをダウンロードして、同じ場所に再アップロードしてください
 
 ![](img/glue_job_result.png)
 
-Glue Jobが正常終了していれば、Redshift Serverlessにデータが追加されているはずなので、クエリして確認します。<br>
-Redshift Serverlessが作成されていることを確認したら、クエリエディタv2を開きます。
+Glue Jobが正常終了していれば、Redshift Serverlessにデータが追加されているはずなので、クエリを実行して確認します。<br>
+Redshift Serverlessが作成されていることを確認し、クエリエディタv2を開きます。
 
 ![](img/redshift_serverless.png)
 
@@ -155,6 +163,8 @@ SELECT
 FROM
     public.nursery_info;
 ```
+
+あとは自由にデータを変えてみたり変換処理を追加してみたりして遊んでみてください。
 
 # 参考URL
 (AWSのIaCでTerraformを使う際の環境設定ベストプラクティス（AWSマルチアカウント対応）)[https://zenn.dev/himekoh/articles/202209021116]
