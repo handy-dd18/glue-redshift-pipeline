@@ -48,6 +48,7 @@ Terraformはバージョンが頻繁に更新されるので、tfenvで管理で
 ```
 $ aws-vault --version
 $ aws-vault add [プロファイル名]
+
 Enter Access Key ID: 
 Enter Secret Access Key:
 ```
@@ -56,6 +57,7 @@ Enter Secret Access Key:
 
 ```
 $ cat ~/.aws/config
+
 [default]
 region=ap-northeast-1
 output=json
@@ -67,6 +69,7 @@ viコマンドなどでconfigファイルを以下のように修正してくだ
 
 ```
 $ cat ~/.aws/config
+
 [default]
 region=ap-northeast-1
 output=json
@@ -89,6 +92,7 @@ $ cd glue-redshift-pipeline
 
 ```
 $ aws-vault exec [プロファイル名]
+
 Enter MFA code for arn:aws:iam::123456789123:mfa/xxxxxxxx: 111111　※MFA設定している人のみ
 Starting subshell /bin/bash, use `exit` to exit the subshell
 ```
@@ -97,6 +101,7 @@ Starting subshell /bin/bash, use `exit` to exit the subshell
 
 ```
 $ aws-vault list
+
 Profile                  Credentials              Sessions
 =======                  ===========              ========
 default                  -                        -
