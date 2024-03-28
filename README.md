@@ -1,0 +1,2 @@
+# glue-redshift-pipeline
+GlueJobからRedshift Serverlessに直接データをインサートするパイプライン
