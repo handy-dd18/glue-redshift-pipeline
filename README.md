@@ -17,7 +17,7 @@ Glue Jobでの取り込みのために事前にUTF-8への文字コード変換�
 # 構成図
 本手順では以下のようなアーキテクチャを構築します。
 
-![](img/glue-redshift-pipeline.png)
+![](img/glue-redshift-pipeline_v2.png)
 
 
 # 検証環境
