@@ -1,0 +1,18 @@
+version: "3.7"
+
+services:
+  terraform:
+    image: hashicorp/terraform:1.7.5
+    volumes:
+      - ./template:/template
+      - ./files/:/files
+    working_dir: /template
+    environment:
+      - AWS_ACCESS_KEY_ID=${AWS_ACCESS_KEY_ID}
+      - AWS_SECRET_ACCESS_KEY=${AWS_SECRET_ACCESS_KEY}
+      - AWS_SESSION_TOKEN=${AWS_SESSION_TOKEN}
+      - AWS_DEFAULT_REGION=${AWS_DEFAULT_REGION}
+      - TF_VAR_vpc_id=${vpc_id}
+      - TF_VAR_subnet_private_1a_id=${subnet_private_1a_id}
+      - TF_VAR_subnet_private_1c_id=${subnet_private_1c_id}
+      - TF_VAR_subnet_private_1d_id=${subnet_private_1d_id}

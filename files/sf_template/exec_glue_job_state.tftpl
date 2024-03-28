@@ -1,0 +1,33 @@
+{
+  "Comment": "A description of my state machine",
+  "StartAt": "Choice",
+  "States": {
+    "Choice": {
+      "Type": "Choice",
+      "Choices": [
+        {
+          "Variable": "$.detail.object.key",
+          "StringMatches": "*sample_data_utf8*",
+          "Next": "RunGlueJob"
+        }
+      ],
+      "Default": "Pass"
+    },
+    "RunGlueJob": {
+      "Type": "Task",
+      "Resource": "arn:aws:states:::glue:startJobRun",
+      "Parameters": {
+        "JobName": "${glue_job_name}",
+        "Arguments": {
+          "--bucket.$": "$.detail.bucket.name",
+          "--bucket_key.$": "$.detail.object.key"
+        }
+      },
+      "End": true
+    },
+    "Pass": {
+      "Type": "Pass",
+      "End": true
+    }
+  }
+}
