@@ -32,7 +32,7 @@ Glue Jobでの取り込みのために事前にUTF-8への文字コード変換�
 # 事前作業
 Terraformはバージョンが頻繁に更新されるので、tfenvで管理できるとはいえ、切り替え忘れによるデプロイ失敗が発生することがあります。<br>
 そこで今回はDockerとaws-vaultを使用してコンテナ上でterraformコマンドを実行するようにして、ローカルでのTerraformインストールを不要にしました。<br>
-なので、まだインストールしていなければ以下ツールを事前にインストールしてください。<br>
+なので、まだインストールしていなければ、以下のツール群を事前にインストールしておいてください。<br>
 - docker((参考URL)[https://zenn.dev/thyt_lab/articles/fee07c278fcaa8])
 - aws-vault((参考URL)[https://qiita.com/tawara_/items/b993815a1bdc3789a3ff])
   - MFA設定している方は(MFA設定)[https://qiita.com/ezaqiita/items/335faf2c122ebd90b6a4]も忘れず
