@@ -163,4 +163,4 @@ FROM
 あとは自由にデータを変えてみたり変換処理を追加してみたりして遊んでみてください。
 
 # 参考URL
-(AWSのIaCでTerraformを使う際の環境設定ベストプラクティス（AWSマルチアカウント対応）)[https://zenn.dev/himekoh/articles/202209021116]
+- [AWSのIaCでTerraformを使う際の環境設定ベストプラクティス(AWSマルチアカウント対応)](https://zenn.dev/himekoh/articles/202209021116)
