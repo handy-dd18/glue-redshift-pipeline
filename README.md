@@ -1,9 +1,9 @@
 # glue-redshift-pipeline
-S3アップロードを起因として、GlueJobからRedshift Serverlessに直接データをインサートするパイプラインです。
+S3アップロードを起因として、GlueJobからRedshift Serverlessに直接データをインサートするサンプルパイプラインをデプロイするためのリポジトリです。
 
 
 # 注意事項
-本リポジトリでのデプロイ手順は後述する前提条件の環境で行っています。<br>
+本リポジトリでのデプロイ手順は後述する検証環境で行っています。<br>
 極力環境依存の手順は減らすようにしてはいますが、必要に応じて読み替えてご実施ください。
 
 
@@ -15,7 +15,7 @@ Glue Jobでの取り込みのために事前にUTF-8への文字コード変換�
 
 
 # 構成図
-本手順では以下のようなアーキテクチャを構築します。
+本リポジトリでは以下のようなアーキテクチャが構築されます。
 
 ![](img/glue-redshift-pipeline_v2.png)
 
@@ -29,23 +29,18 @@ Glue Jobでの取り込みのために事前にUTF-8への文字コード変換�
   - aws-vault 7.2.0-Homebrew
 
 # 前提条件
-1つのVPCと3AZ分のSubnetは事前に作成されているものとします。
-デプロイ環境になければ作成しておいてください。
+- デプロイに必要な1つのVPCと3AZ分のSubnetは既に作成されているものとします。
+- 以下のツール群が既にインストールされているものとします。
+  - docker((参考URL)[https://zenn.dev/thyt_lab/articles/fee07c278fcaa8])
+  - aws-vault((参考URL)[https://qiita.com/tawara_/items/b993815a1bdc3789a3ff])
+    - MFA設定している方は(MFA設定)[https://qiita.com/ezaqiita/items/335faf2c122ebd90b6a4]も忘れず
+- AWSのアクセスキー、シークレットアクセスキーを事前に作成され、利用可能な状態になっているものとします。
 
-# 事前作業
-Terraformはバージョンが頻繁に更新されるので、tfenvで管理できるとはいえ、切り替え忘れによるデプロイ失敗が発生することがあります。<br>
-そこで今回はDockerとaws-vaultを使用してコンテナ上でterraformコマンドを実行するようにして、ローカルでのTerraformインストールを不要にしました。<br>
-なので、まだインストールしていなければ、以下のツール群を事前にインストールしておいてください。<br>
-- docker((参考URL)[https://zenn.dev/thyt_lab/articles/fee07c278fcaa8])
-- aws-vault((参考URL)[https://qiita.com/tawara_/items/b993815a1bdc3789a3ff])
-  - MFA設定している方は(MFA設定)[https://qiita.com/ezaqiita/items/335faf2c122ebd90b6a4]も忘れず
-
-また、AWSのアクセスキー、シークレットアクセスキーを事前に作成してメモしておいてください。
-
+※今回はDockerとaws-vaultを使用してコンテナ上でterraformコマンドを実行するようにして、ローカルでのTerraformインストールを不要にしました。<br>
 
 # デプロイ手順
 ## aws-vault設定
-最初にAWSの認証情報を登録します。
+最初にAWSの認証情報を登録します。<br>
 [プロファイル名]には自身がわかりやすいプロファイル名を設定してください。
 
 ```
@@ -68,7 +63,8 @@ output=json
 [プロファイル名]
 ```
 
-viコマンドなどでconfigファイルを以下のように修正してください。
+viコマンドなどを使用してconfigファイルを以下のように修正してください。<br>
+mfa_serialにはご自身のものを設定してください。
 
 ```
 $ cat ~/.aws/config
@@ -84,14 +80,14 @@ mfa_serial=arn:aws:iam::123456789123:mfa/xxxxxxxx　※MFA設定している人�
 ```
 
 ## デプロイ実施
-リポジトリからソースコードを取得してきます。
+リポジトリからソースコードを取得します。
 
 ```
 $ git clone [Clone URL]
 $ cd glue-redshift-pipeline
 ```
 
-デプロイコマンドを実行する前にaws-vaultを呼び出してAWSの一時的な認証情報を取得・設定しておきます。
+デプロイコマンドを実行する前にaws-vaultを呼び出してAWSの一時的な認証情報を取得・設定します。
 
 ```
 $ aws-vault exec [プロファイル名]
@@ -132,7 +128,7 @@ $ docker compose run --rm terraform apply -refresh-only
 ```
 
 ## デプロイ後確認
-正常にデプロイされたら、「raw-data-[accountid]」バケットの「from_samplesystem/sample_data/」プレフィックスにサンプルファイルがアップロードされます。
+正常にデプロイされたら、「raw-data-[accountid]」バケットの「from_samplesystem/sample_data/」プレフィックスにサンプルファイルが自動でアップロードされているはずです。
 
 ![](img/s3_file.png)
 
