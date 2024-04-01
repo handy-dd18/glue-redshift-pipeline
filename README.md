@@ -31,9 +31,9 @@ Glue Jobでの取り込みのために事前にUTF-8への文字コード変換�
 # 前提条件
 - デプロイに必要な1つのVPCと3AZ分のSubnetは既に作成されているものとします。
 - 以下のツール群が既にインストールされているものとします。
-  - docker((参考URL)[https://zenn.dev/thyt_lab/articles/fee07c278fcaa8])
-  - aws-vault((参考URL)[https://qiita.com/tawara_/items/b993815a1bdc3789a3ff])
-    - MFA設定している方は(MFA設定)[https://qiita.com/ezaqiita/items/335faf2c122ebd90b6a4]も忘れず
+  - docker([参考URL](https://zenn.dev/thyt_lab/articles/fee07c278fcaa8))
+  - aws-vault([参考URL](https://qiita.com/tawara_/items/b993815a1bdc3789a3ff))
+    - MFA設定している方は[MFA設定](https://qiita.com/ezaqiita/items/335faf2c122ebd90b6a4)も忘れず
 - AWSのアクセスキー、シークレットアクセスキーを事前に作成され、利用可能な状態になっているものとします。
 
 ※今回はDockerとaws-vaultを使用してコンテナ上でterraformコマンドを実行するようにして、ローカルでのTerraformインストールを不要にしました。<br>
