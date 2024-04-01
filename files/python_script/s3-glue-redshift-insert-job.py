@@ -87,10 +87,10 @@ AmazonRedshift_node = glueContext.write_dynamic_frame.from_options(
     frame=modified_dynamic_frame,
     connection_type="redshift",
     connection_options={
-        "redshiftTmpDir": "s3://glue-temp-941996685139/redshift_temporary/",
+        "redshiftTmpDir": "s3://__TEMP_S3_BUCKET_NAME__/redshift_temporary/",
         "useConnectionProperties": "true",
         "dbtable": "public.nursery_info",
-        "connectionName": "Redshift Serverless Connection",
+        "connectionName": "__REDSHIFT_CONNECTION_NAME__",
         "preactions": """
             CREATE TABLE IF NOT EXISTS public.nursery_info (
                 id BIGINT,
