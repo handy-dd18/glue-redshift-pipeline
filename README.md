@@ -1,5 +1,5 @@
 # glue-redshift-pipeline
-S3アップロードを起因として、GlueJobからRedshift Serverlessに直接データをインサートするサンプルパイプラインをデプロイするためのリポジトリです。
+S3トリガーを使用してGlueJobを呼び出し、変換処理後に直接Redshift Serverlessにデータをインサートするデータパイプラインをデプロイするためのリポジトリです。
 
 
 # 注意事項
